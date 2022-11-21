@@ -93,26 +93,7 @@ const BOOKS = [
 ];
 
 /* DETAILS ABOUT CURRENT ORDER */
-let ORDER = [
-  {
-    author: "John Resig and Bear Bibeault",
-    imageLink:
-      "https://images.pexels.com/photos/9758166/pexels-photo-9758166.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    title: "Secrets of the JavaScript Ninja",
-    price: 33,
-    description:
-      "Secrets of the Javascript Ninja takes you on a journey towards mastering modern JavaScript development in three phases: design, construction, and maintenance. Written for JavaScript developers with intermediate-level skills, this book will give you the knowledge you need to create a cross-browser JavaScript library from the ground up.",
-  },
-  {
-    author: "John Resig and Bear Bibeault",
-    imageLink:
-      "https://images.pexels.com/photos/9758166/pexels-photo-9758166.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    title: "Secrets of the JavaScript Ninja",
-    price: 33,
-    description:
-      "Secrets of the Javascript Ninja takes you on a journey towards mastering modern JavaScript development in three phases: design, construction, and maintenance. Written for JavaScript developers with intermediate-level skills, this book will give you the knowledge you need to create a cross-browser JavaScript library from the ground up.",
-  },
-];
+let ORDER = [];
 
 const countingHowManySameBooks = (titleToCheck, orderArray) => {
   let counter = 0;
@@ -433,7 +414,9 @@ const validate = function (event) {
   if (document.querySelectorAll("input[type=radio]:checked").length < 1) {
     failures.push({ input: "checkbox" });
   }
-
+  if (failures.length < 0) {
+    valid = true;
+  }
   return failures;
 };
 
