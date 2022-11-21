@@ -430,8 +430,22 @@ const validate = function (event) {
     failures.push({ input: "fnumber" });
   }
 
+  if (document.querySelectorAll("input[type=radio]:checked").length < 1) {
+    failures.push({ input: "checkbox" });
+  }
+
   return failures;
 };
+
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+checkboxes.forEach((checkbox) => {
+  checkbox.addEventListener("click", (e) => {
+    if (document.querySelectorAll("input[type=checkbox]:checked").length > 2) {
+      e.preventDefault();
+    }
+  });
+});
 
 const send = function (ev) {
   ev.preventDefault();
