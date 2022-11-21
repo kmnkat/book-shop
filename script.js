@@ -153,9 +153,8 @@ form.style.display = "none";
 const reloadPage = () => {
   if (ORDER_STATUS === "ordering") {
     if (!MAIN[0].contains(HEADER)) {
-      MAIN[0].removeChild(HEADER);
+      MAIN[0].append(HEADER);
     }
-
     MAIN[0].append(ORDER_TAB);
     MAIN[0].append(CATALOG);
   } else if (ORDER_STATUS === "form-filling") {
