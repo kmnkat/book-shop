@@ -6,7 +6,7 @@
   <body>
     <main>
       <div class="FORM">
-        <form action="SEND">
+        <form action="SEND" id="order-form">
           <label for="fname">First name:</label
           ><input type="text" name="fname" id="fname" required />
           <label for="sname">Surname:</label
@@ -16,7 +16,7 @@
           <label for="street">Street:</label
           ><input type="text" name="street" id="street" required />
           <label for="hnumber">House number:</label
-          ><input type="number" min="0" name="hnumber" id="hnumber" required />
+          ><input type="text" name="hnumber" id="hnumber" required />
           <label for="fnumber">Flat number:</label
           ><input type="text" name="fnumber" id="fnumber" required />
           <div class="form__payment">
@@ -37,7 +37,7 @@
             <input type="checkbox" id="gift4" name="gift4" value="gift4" />
             <label for="gift4">branded pen or pencil</label><br />
           </div>
-          <button type="submit">Confirm</button>
+          <button type="submit" id="button-submit">Confirm</button>
         </form>
       </div>
     </main>

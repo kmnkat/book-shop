@@ -365,6 +365,19 @@ form > input {
   min-width: 30rem;
   margin: 1rem 0;
 }
+
+form > input:focus {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  outline: none;
+}
+
 form > label {
   font-size: 3rem;
+}
+
+.error {
+  -webkit-box-shadow: inset 0px 0px 0px 0.2rem var(--color-accent);
+  -moz-box-shadow: inset 0px 0px 0px 0.2rem var(--color-accent);
+  box-shadow: inset 0px 0px 0px 0.2rem var(--color-accent);
 }

@@ -138,6 +138,13 @@ const removeFromCart = (bookToRemove) => {
   });
 };
 
+const changeCartMiniStatus = () => {
+  const cartStat = document.getElementById("totalAmount");
+  if (cartStat) {
+    cartStat.innerHTML = recountNumberOfBooks();
+  }
+};
+
 let ORDER_STATUS = "ordering";
 
 //main parts
@@ -208,6 +215,7 @@ const showCurrentCartState = () => {
         removeFromCart(ordered_book.title);
         showCurrentCartState();
         recountNumberOfBooks();
+        changeCartMiniStatus();
       });
       infoAboutBook.appendChild(removeBtn);
       ORDER_TAB.appendChild(infoAboutBook);
@@ -216,6 +224,7 @@ const showCurrentCartState = () => {
   const toPay = recountTotal();
   const priceTotalInCart = document.createElement("h5");
   priceTotalInCart.innerHTML = `TOTAL: $${toPay.toFixed(2)}`;
+
   const orderBtn = document.createElement("button");
   orderBtn.innerHTML = "Order";
   orderBtn.classList.add("order-tab__order-btn");
@@ -233,6 +242,7 @@ if (CART_QUANTITY === 0) {
 } else {
   showCurrentCartState();
   recountNumberOfBooks();
+  changeCartMiniStatus();
 }
 
 // ---------------------------> DRAG
@@ -248,7 +258,12 @@ const cartBtn = document.createElement("button");
 cartBtn.innerHTML =
   '<img src="https://cdn-icons-png.flaticon.com/512/2838/2838838.png" class="cart-img"/>';
 const quantityElement = document.createElement("div");
+cartBtn.addEventListener("click", () => {
+  ORDER_STATUS = "form-filling";
+  reloadPage();
+});
 quantityElement.innerHTML = recountNumberOfBooks();
+quantityElement.id = "totalAmount";
 cartBtn.appendChild(quantityElement);
 namePart.appendChild(nameOfCatalog);
 namePart.appendChild(cartBtn);
@@ -281,6 +296,7 @@ BOOKS.map((book) => {
       ORDER.push(book);
       showCurrentCartState();
       recountNumberOfBooks();
+      changeCartMiniStatus();
     }
   });
   //------------textPart
@@ -329,6 +345,7 @@ BOOKS.map((book) => {
     ORDER.push(book);
     showCurrentCartState();
     recountNumberOfBooks();
+    changeCartMiniStatus();
   });
   btns.appendChild(addBtn);
   detailedInfo.appendChild(btns);
@@ -353,3 +370,79 @@ bookGrid.classList.add("book-grid");
 // FORM
 
 form.classList.add("form");
+
+let date = document.getElementById("date");
+let today = new Date();
+date.min = new Date(today.setDate(today.getDate() + 1))
+  .toISOString()
+  .split("T")[0];
+
+// ------------------ validation
+let valid = false;
+
+const invalidInfo = (element) => {
+  element.classList.add("error");
+  element.value = "";
+  element.placeholder = "The field is invalid";
+  element.addEventListener("focus", () => {
+    element.classList.remove("error");
+    element.placeholder = "";
+  });
+};
+
+const validate = function (event) {
+  let failures = [];
+  let fname = document.getElementById("fname");
+  if (!(fname.value.length > 3) || fname.value.match(/\s+/)) {
+    invalidInfo(fname);
+    failures.push({ input: "fname" });
+  }
+
+  let sname = document.getElementById("sname");
+  if (!(sname.value.length > 4) || sname.value.match(/\s+/)) {
+    invalidInfo(sname);
+    failures.push({ input: "sname" });
+  }
+
+  let street = document.getElementById("street");
+  if (!(street.value.length > 4)) {
+    invalidInfo(street);
+    failures.push({ input: "street" });
+  }
+
+  let hnumber = document.getElementById("hnumber");
+  if (
+    Number(hnumber.value) < 0 ||
+    hnumber.value.length <= 0 ||
+    !hnumber.value.match(/^\d+/)
+  ) {
+    invalidInfo(hnumber);
+    failures.push({ input: "hnumber" });
+  }
+
+  let fnumber = document.getElementById("fnumber");
+  if (
+    Number(fnumber.value) < 0 ||
+    fnumber.value.length <= 0 ||
+    fnumber.value.match(/^\-/)
+  ) {
+    invalidInfo(fnumber);
+    failures.push({ input: "fnumber" });
+  }
+
+  return failures;
+};
+
+const send = function (ev) {
+  ev.preventDefault();
+  ev.stopPropagation();
+  let fails = validate();
+  console.log(fails);
+  if (fails.length === 0) {
+    document.getElementById("order-form").submit();
+  } else {
+    console.log("bad!");
+  }
+};
+
+document.getElementById("button-submit").addEventListener("click", send);
