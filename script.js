@@ -92,15 +92,96 @@ const BOOKS = [
   },
 ];
 
-let CART_QUANTITY = 0;
+/* DETAILS ABOUT CURRENT ORDER */
+const ORDER = [
+  {
+    author: "John Resig and Bear Bibeault",
+    imageLink:
+      "https://images.pexels.com/photos/9758166/pexels-photo-9758166.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    title: "Secrets of the JavaScript Ninja",
+    price: 33,
+    description:
+      "Secrets of the Javascript Ninja takes you on a journey towards mastering modern JavaScript development in three phases: design, construction, and maintenance. Written for JavaScript developers with intermediate-level skills, this book will give you the knowledge you need to create a cross-browser JavaScript library from the ground up.",
+  },
+  {
+    author: "John Resig and Bear Bibeault",
+    imageLink:
+      "https://images.pexels.com/photos/9758166/pexels-photo-9758166.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    title: "Secrets of the JavaScript Ninja",
+    price: 33,
+    description:
+      "Secrets of the Javascript Ninja takes you on a journey towards mastering modern JavaScript development in three phases: design, construction, and maintenance. Written for JavaScript developers with intermediate-level skills, this book will give you the knowledge you need to create a cross-browser JavaScript library from the ground up.",
+  },
+];
+
+const countingHowManySameBooks = (titleToCheck, orderArray) => {
+  let counter = 0;
+  for (const book of orderArray) {
+    if (book.title === titleToCheck) counter += 1;
+  }
+  return counter;
+};
+
+let CART_QUANTITY = ORDER.length;
+
+const recountNumberOfBooks = () => {
+  return ORDER.length;
+};
+
+const recountTotal = () => {
+  return ORDER.reduce((sum, book) => sum + book.price, 0);
+};
 
 //main parts
 
 const MAIN = document.getElementsByTagName("main");
-
 const CATALOG = document.createElement("div");
+const ORDER_TAB = document.createElement("div");
+MAIN[0].append(ORDER_TAB);
 
-MAIN[0].appendChild(CATALOG);
+MAIN[0].append(CATALOG);
+
+// functions for ordering
+
+ORDER_TAB.classList.add("order-tab");
+
+const showCurrentCartState = () => {
+  ORDER_TAB.innerHTML = "";
+  const titleOfOrderTab = document.createElement("div");
+  titleOfOrderTab.innerHTML = `<h4>Your order:</h4>`;
+  ORDER_TAB.appendChild(titleOfOrderTab);
+  ORDER.map((ordered_book) => {
+    let idOfBook = `ID${ordered_book.title}`;
+
+    if (ORDER_TAB.contains(document.getElementById(idOfBook))) {
+      const countOfSameBook = countingHowManySameBooks(
+        ordered_book.title,
+        ORDER
+      );
+      const existingDetailsAboutBook = document.getElementById(idOfBook);
+      const counter = document.createElement("div");
+      counter.innerHTML = `<span>${countOfSameBook}</span>`;
+      existingDetailsAboutBook.appendChild(counter);
+    } else {
+      const infoAboutBook = document.createElement("div");
+      infoAboutBook.id = idOfBook;
+      infoAboutBook.classList.add("order-tab__book-info");
+      infoAboutBook.innerHTML = `<img src=${ordered_book.imageLink}/><p>${ordered_book.title}</p>`;
+      ORDER_TAB.appendChild(infoAboutBook);
+    }
+  });
+  const toPay = recountTotal();
+  const priceTotalInCart = document.createElement("h5");
+  priceTotalInCart.innerHTML = `TOTAL: $${toPay.toFixed(2)}`;
+  ORDER_TAB.appendChild(priceTotalInCart);
+};
+
+if (CART_QUANTITY === 0) {
+  ORDER_TAB.innerHTML = "";
+} else {
+  showCurrentCartState();
+  recountNumberOfBooks();
+}
 
 // content
 // ---- catalog
@@ -112,21 +193,11 @@ const cartBtn = document.createElement("button");
 cartBtn.innerHTML =
   '<img src="https://cdn-icons-png.flaticon.com/512/2838/2838838.png" class="cart-img"/>';
 const quantityElement = document.createElement("div");
-quantityElement.innerHTML = CART_QUANTITY;
-
+quantityElement.innerHTML = recountNumberOfBooks();
 cartBtn.appendChild(quantityElement);
-
 namePart.appendChild(nameOfCatalog);
 namePart.appendChild(cartBtn);
-
 CATALOG.appendChild(namePart);
-
-const instructionDiv = document.createElement("div");
-instructionDiv.innerHTML =
-  "Buy the best book online! <span>click on the button or drag and drop image to cart above</span>";
-instructionDiv.classList.add("instruction");
-
-CATALOG.appendChild(instructionDiv);
 
 // -------- books
 const bookGrid = document.createElement("div");
@@ -140,7 +211,7 @@ BOOKS.map((book) => {
   //------------textPart
   const detailedInfo = document.createElement("div");
   detailedInfo.classList.add("book-details__info");
-  //------------title&author
+  //------------title&author, price
   const detailsAboutBook = document.createElement("div");
   const author = document.createElement("h3");
   author.innerHTML = book.author;
@@ -149,6 +220,9 @@ BOOKS.map((book) => {
   title.innerHTML = book.title;
   detailsAboutBook.appendChild(title);
   detailedInfo.appendChild(detailsAboutBook);
+  const priceOfBook = document.createElement("h4");
+  priceOfBook.innerHTML = `$${book.price.toFixed(2)}`;
+  detailsAboutBook.appendChild(priceOfBook);
   //---btns
   const btns = document.createElement("div");
   btns.classList.add("book-details__btns");
@@ -175,6 +249,12 @@ BOOKS.map((book) => {
   const addBtn = document.createElement("button");
   addBtn.id = `ADD${book.title}`;
   addBtn.innerHTML = "add to cart";
+  // ----------------------- add interactivity
+  addBtn.addEventListener("click", () => {
+    ORDER.push(book);
+    showCurrentCartState();
+    recountNumberOfBooks();
+  });
   btns.appendChild(addBtn);
   detailedInfo.appendChild(btns);
 
