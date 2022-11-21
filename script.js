@@ -93,7 +93,7 @@ const BOOKS = [
 ];
 
 /* DETAILS ABOUT CURRENT ORDER */
-const ORDER = [
+let ORDER = [
   {
     author: "John Resig and Bear Bibeault",
     imageLink:
@@ -132,14 +132,44 @@ const recountTotal = () => {
   return ORDER.reduce((sum, book) => sum + book.price, 0);
 };
 
+const removeFromCart = (bookToRemove) => {
+  ORDER = ORDER.filter(function (bookInCart) {
+    return bookInCart.title != bookToRemove;
+  });
+};
+
+let ORDER_STATUS = "form-filling";
+
 //main parts
 
 const MAIN = document.getElementsByTagName("main");
+const HEADER = document.createElement("div");
 const CATALOG = document.createElement("div");
 const ORDER_TAB = document.createElement("div");
-MAIN[0].append(ORDER_TAB);
 
-MAIN[0].append(CATALOG);
+const form = document.querySelector(".FORM");
+form.style.display = "none";
+
+const reloadPage = () => {
+  if (ORDER_STATUS === "ordering") {
+    if (!MAIN[0].contains(HEADER)) {
+      MAIN[0].removeChild(HEADER);
+    }
+
+    MAIN[0].append(ORDER_TAB);
+    MAIN[0].append(CATALOG);
+  } else if (ORDER_STATUS === "form-filling") {
+    MAIN[0].prepend(HEADER);
+    form.style.display = "inline-block";
+    if (MAIN[0].contains(CATALOG)) {
+      MAIN[0].removeChild(CATALOG);
+    }
+    if (MAIN[0].contains(ORDER_TAB)) {
+      MAIN[0].removeChild(ORDER_TAB);
+    }
+  }
+};
+reloadPage();
 
 // functions for ordering
 
@@ -166,14 +196,37 @@ const showCurrentCartState = () => {
       const infoAboutBook = document.createElement("div");
       infoAboutBook.id = idOfBook;
       infoAboutBook.classList.add("order-tab__book-info");
-      infoAboutBook.innerHTML = `<img src=${ordered_book.imageLink}/><p>${ordered_book.title}</p>`;
+      infoAboutBook.innerHTML = `<img src=${
+        ordered_book.imageLink
+      }/><div class="order-tab__book-info-price">$${ordered_book.price.toFixed(
+        2
+      )}</div><p>${ordered_book.title}</p>`;
+      const removeBtn = document.createElement("button");
+      removeBtn.innerHTML =
+        "<img src='https://cdn-icons-png.flaticon.com/512/75/75519.png' alt='cancel'/>";
+      // -----------------> remove btn addlist
+      removeBtn.addEventListener("click", () => {
+        removeFromCart(ordered_book.title);
+        showCurrentCartState();
+        recountNumberOfBooks();
+      });
+      infoAboutBook.appendChild(removeBtn);
       ORDER_TAB.appendChild(infoAboutBook);
     }
   });
   const toPay = recountTotal();
   const priceTotalInCart = document.createElement("h5");
   priceTotalInCart.innerHTML = `TOTAL: $${toPay.toFixed(2)}`;
+  const orderBtn = document.createElement("button");
+  orderBtn.innerHTML = "Order";
+  orderBtn.classList.add("order-tab__order-btn");
+  orderBtn.addEventListener("click", () => {
+    ORDER_STATUS = "form-filling";
+    reloadPage();
+  });
+
   ORDER_TAB.appendChild(priceTotalInCart);
+  ORDER_TAB.appendChild(orderBtn);
 };
 
 if (CART_QUANTITY === 0) {
@@ -183,9 +236,12 @@ if (CART_QUANTITY === 0) {
   recountNumberOfBooks();
 }
 
+// ---------------------------> DRAG
+
 // content
 // ---- catalog
 // -------- name
+
 const namePart = document.createElement("div");
 const nameOfCatalog = document.createElement("h1");
 nameOfCatalog.innerHTML = "Welcome to amazing Book Shop";
@@ -197,7 +253,18 @@ quantityElement.innerHTML = recountNumberOfBooks();
 cartBtn.appendChild(quantityElement);
 namePart.appendChild(nameOfCatalog);
 namePart.appendChild(cartBtn);
-CATALOG.appendChild(namePart);
+HEADER.appendChild(namePart);
+
+// ------------ adding by drag
+
+let overDrag = false;
+const container = document.querySelector(".order-tab");
+if (container) {
+  container.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    overDrag = true;
+  });
+}
 
 // -------- books
 const bookGrid = document.createElement("div");
@@ -208,6 +275,15 @@ BOOKS.map((book) => {
   //---------------cover
   const cover = document.createElement("img");
   cover.src = book.imageLink;
+  cover.draggable = true;
+  cover.classList.add("dragable");
+  cover.addEventListener("dragend", () => {
+    if (overDrag) {
+      ORDER.push(book);
+      showCurrentCartState();
+      recountNumberOfBooks();
+    }
+  });
   //------------textPart
   const detailedInfo = document.createElement("div");
   detailedInfo.classList.add("book-details__info");
@@ -273,7 +349,8 @@ namePart.style.backgroundImage =
   "url('https://images.pexels.com/photos/2925304/pexels-photo-2925304.jpeg')";
 
 CATALOG.classList.add("catalogue");
-
 bookGrid.classList.add("book-grid");
 
-// ---------- cart
+// FORM
+
+form.classList.add("form");

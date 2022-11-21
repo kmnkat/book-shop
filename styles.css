@@ -243,7 +243,7 @@ button[id^="CANCEL"]:active {
 }
 
 .order-tab__book-info > img {
-  min-width: 10rem;
+  max-width: 10rem;
   max-height: 14rem;
   object-fit: cover;
   object-position: center;
@@ -259,6 +259,7 @@ button[id^="CANCEL"]:active {
 
 .order-tab p {
   font-size: 2rem;
+  line-height: 1.8rem;
   max-width: 50%;
   display: inline;
   font-weight: lighter;
@@ -283,7 +284,7 @@ button[id^="CANCEL"]:active {
   top: 3rem;
   left: 3rem;
   background-color: var(--color-white);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -291,4 +292,79 @@ button[id^="CANCEL"]:active {
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  flex-wrap: wrap;
+}
+
+.order-tab__book-info > button > img {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.order-tab__book-info > button {
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  border: none;
+}
+
+.order-tab__book-info > button:hover {
+  background-color: var(--color-accent);
+}
+
+.order-tab__book-info-price {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  background-color: var(--color-black);
+  padding: 1rem;
+  border-radius: 1rem;
+  color: var(--color-white);
+}
+
+.order-tab__order-btn {
+  color: var(--color-white);
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left: 1rem;
+  background-color: var(--color-accent);
+  padding: 1rem;
+  border-radius: 2rem;
+  border: none;
+}
+.order-tab__order-btn:hover {
+  color: var(--color-accent);
+  background-color: var(--color-white);
+}
+
+/* form */
+.FORM {
+  margin: 0;
+  position: relative;
+  left: 50%;
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  background-color: var(--color-green-light);
+  padding: 3rem 6rem;
+  border-radius: 6rem;
+}
+
+.form {
+  display: block;
+  width: 40%;
+  margin: 0 auto;
+  font-size: 2rem;
+}
+form > input {
+  display: block;
+  background-color: var(--color-green);
+  border: none;
+  padding: 1rem;
+  border-radius: 1rem;
+  min-width: 30rem;
+  margin: 1rem 0;
+}
+form > label {
+  font-size: 3rem;
 }

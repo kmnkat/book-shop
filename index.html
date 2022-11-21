@@ -4,7 +4,43 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
-    <main></main>
+    <main>
+      <div class="FORM">
+        <form action="SEND">
+          <label for="fname">First name:</label
+          ><input type="text" name="fname" id="fname" required />
+          <label for="sname">Surname:</label
+          ><input type="text" name="sname" id="sname" required />
+          <label for="date">Delivery:</label
+          ><input type="date" name="date" id="date" required />
+          <label for="street">Street:</label
+          ><input type="text" name="street" id="street" required />
+          <label for="hnumber">House number:</label
+          ><input type="number" min="0" name="hnumber" id="hnumber" required />
+          <label for="fnumber">Flat number:</label
+          ><input type="text" name="fnumber" id="fnumber" required />
+          <div class="form__payment">
+            <input type="radio" id="cash" name="payment" value="cash" />
+            <label for="cash">cash</label>
+            <input type="radio" id="card" name="payment" value="card" />
+            <label for="card">card</label>
+          </div>
+          <div class="form__gifts">
+            Chose 2 gifts:<br />
+            <input type="checkbox" id="gift1" name="gift1" value="gift1" />
+            <label for="gift1">pack as a gift,</label><br />
+            <input type="checkbox" id="gift2" name="gift2" value="gift2" />
+            <label for="gift2">add postcard,</label><br />
+            <input type="checkbox" id="gift3" name="gift3" value="gift3" />
+            <label for="gift3">provide 2% discount to the next time,</label
+            ><br />
+            <input type="checkbox" id="gift4" name="gift4" value="gift4" />
+            <label for="gift4">branded pen or pencil</label><br />
+          </div>
+          <button type="submit">Confirm</button>
+        </form>
+      </div>
+    </main>
   </body>
   <script src="script.js"></script>
 </html>
