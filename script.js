@@ -138,7 +138,7 @@ const removeFromCart = (bookToRemove) => {
   });
 };
 
-let ORDER_STATUS = "form-filling";
+let ORDER_STATUS = "ordering";
 
 //main parts
 
